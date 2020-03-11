@@ -6,7 +6,7 @@ const imageRef = document.querySelector(".lightbox__image");
 const contentRef = document.querySelector(".lightbox__content");
 
 galleryRef.addEventListener("click", openModal);
-lightBox.addEventListener("click", onOverlayClick);
+lightBox.addEventListener("click", onModalClick);
 
 const addGalleryImage = array => {
   const gallery = [];
@@ -52,7 +52,7 @@ function clotheModal() {
   window.removeEventListener("keydown", onPressEscape);
 }
 
-function onOverlayClick(event) {
+function onModalClick(event) {
   if (event.target.nodeName === "BUTTON" || event.target === contentRef) {
     clotheModal();
     return;
