@@ -3,9 +3,10 @@ import galleryItems from "./gallery-items.js";
 const galleryRef = document.querySelector(".js-gallery");
 const lightBox = document.querySelector(".js-lightbox");
 const imageRef = document.querySelector(".lightbox__image");
+const contentRef = document.querySelector(".lightbox__content");
 
 galleryRef.addEventListener("click", openModal);
-lightBox.addEventListener("click", clotheModal);
+lightBox.addEventListener("click", onOverlayClick);
 
 const addGalleryImage = array => {
   const gallery = [];
@@ -39,21 +40,29 @@ function openModal(event) {
   if (event.target.nodeName !== "IMG") {
     return;
   }
-
   const imageSource = event.target.dataset.source;
   imageRef.setAttribute("src", imageSource);
-
   lightBox.classList.add("is-open");
+  window.addEventListener("keydown", onPressEscape);
 }
 
-function clotheModal(event) {
-  if (event.target.nodeName !== "BUTTON") {
+function clotheModal() {
+  imageRef.setAttribute("src", "");
+  lightBox.classList.remove("is-open");
+  window.removeEventListener("keydown", onPressEscape);
+}
+
+function onOverlayClick(event) {
+  if (event.target.nodeName === "BUTTON" || event.target === contentRef) {
+    clotheModal();
     return;
   }
+}
 
-  imageRef.setAttribute("src", "");
-
-  lightBox.classList.remove("is-open");
+function onPressEscape(event) {
+  if (event.code === "Escape") {
+    clotheModal();
+  }
 }
 
 // console.log(galleryItems);
