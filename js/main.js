@@ -19,7 +19,7 @@ const addGalleryImage = array => {
     link.classList.add("galery__link");
     image.classList.add("gallery__image");
 
-    image.setAttribute("index", 1 + i);
+    image.setAttribute("data-index", i);
     image.setAttribute("src", unit.preview);
     image.setAttribute("data-source", unit.original);
     image.setAttribute("alt", unit.description);
@@ -41,15 +41,19 @@ function openModal(event) {
     return;
   }
   const imageSource = event.target.dataset.source;
+  const imageIndex = event.target.dataset.index;
+
+  imageRef.setAttribute("data-index", imageIndex);
   imageRef.setAttribute("src", imageSource);
+
   lightBox.classList.add("is-open");
-  window.addEventListener("keydown", onPressEscape);
+  window.addEventListener("keydown", onPressKey);
 }
 
 function clotheModal() {
   imageRef.setAttribute("src", "");
   lightBox.classList.remove("is-open");
-  window.removeEventListener("keydown", onPressEscape);
+  window.removeEventListener("keydown", onPressKey);
 }
 
 function onModalClick(event) {
@@ -59,11 +63,36 @@ function onModalClick(event) {
   }
 }
 
-function onPressEscape(event) {
+function onPressKey(event) {
   if (event.code === "Escape") {
     clotheModal();
   }
+
+  if (event.code === "ArrowLeft") {
+    onPreviewImage(imageRef.dataset.index);
+  }
+
+  if (event.code === "ArrowRight") {
+    onNextImage(imageRef.dataset.index);
+  }
 }
 
-// console.log(galleryItems);
-// console.log(galleryRef);
+function onPreviewImage(index) {
+  if (index === "0") {
+    console.log(`First image`);
+    return;
+  }
+  index = Number(index) - 1;
+  imageRef.src = galleryItems[index].original;
+  imageRef.dataset.index = index;
+}
+
+function onNextImage(index) {
+  if (Number(index) === galleryItems.length - 1) {
+    console.log(`Last image`);
+    return;
+  }
+  index = Number(index) + 1;
+  imageRef.src = galleryItems[index].original;
+  imageRef.dataset.index = index;
+}
